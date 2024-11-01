@@ -33,6 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <header>
         <title>BodyMaps Demo</title>
+        <link rel="icon" href="/favicon.ico" />
       </header>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
