@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <header>
-        <title>SuPreM Demo</title>
+        <title>BodyMaps Demo</title>
       </header>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
