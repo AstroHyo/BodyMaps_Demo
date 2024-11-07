@@ -9,11 +9,11 @@ const DynamicUploadCT = dynamic(() => import("@/components/UploadCT"), {
 
 export default function MainPage() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col items-center justify-center p-4">
       <img src="/BodyMapsIcon.png" alt="BodyMaps Logo" className="w-32 mb-4" />
       <h1 className="text-4xl font-bold mb-8 text-center">BodyMaps Demo</h1>
       <DynamicUploadCT />
-      <p className="text-sm text-gray-400 mt-4 max-w-md text-center">
+      <p className="text-sm text-gray-700 mt-4 max-w-md text-center">
         By using this online service, you agree that the data can be used to
         improve the model.
       </p>
