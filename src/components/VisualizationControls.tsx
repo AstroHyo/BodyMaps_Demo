@@ -6,12 +6,20 @@ export default function VisualizationControls({
   setVisibilities,
   opacity,
   setOpacity,
+  window,
+  setWindow,
+  level,
+  setLevel
 }: {
   segments?: { organName: string }[];
   visibilities: boolean[];
   setVisibilities: React.Dispatch<React.SetStateAction<boolean[]>>;
   opacity: number;
   setOpacity: (opacity: number) => void;
+  window: number;
+  setWindow: (window: number) => void;
+  level: number;
+  setLevel: (level: number) => void;
 }) {
   return (
     <>
@@ -70,6 +78,34 @@ export default function VisualizationControls({
           step="0.01"
           value={opacity}
           onChange={(e) => setOpacity(parseFloat(e.target.value))}
+          className="w-full"
+        />
+      </div>
+      <div className="mt-6">
+        <label className="block text-sm font-medium mb-2 whitespace-nowrap">
+          Window: {window}
+        </label>
+        <input
+          type="range"
+          min="1"
+          max="2000"
+          step="10"
+          value={window}
+          onChange={(e) => setWindow(parseFloat(e.target.value))}
+          className="w-full"
+        />
+      </div>
+      <div className="mt-6">
+        <label className="block text-sm font-medium mb-2 whitespace-nowrap">
+          Level: {level}
+        </label>
+        <input
+          type="range"
+          min="-1000"
+          max="1000"
+          step="10"
+          value={level}
+          onChange={(e) => setLevel(parseFloat(e.target.value))}
           className="w-full"
         />
       </div>
