@@ -4,6 +4,8 @@ import arrayBufferToNiftiImageVolume from "@/utils/arrayBufferToNiftiImageVolume
 import {
   DEFAULT_SEGMENTATION_CONFIG,
   DEFAULT_SEGMENTATION_OPACITY,
+  DEFAULT_IMAGE_WINDOW,
+  DEFAULT_IMAGE_LEVEL,
   defaultColors,
 } from "@/utils/consts";
 import { initCornerstone, TOOLS } from "@/utils/cornerstone";
@@ -13,6 +15,7 @@ import {
   RenderingEngine,
   setVolumesForViewports,
   volumeLoader,
+  VolumeViewport
 } from "@cornerstonejs/core";
 import {
   Enums,
@@ -59,6 +62,11 @@ type CornerstoneContextType = {
 
   toolGroupOpacity: number;
   setToolGroupOpacity: (opacity: number) => void;
+
+  window: number;
+  setWindow: (window: number) => void;
+  level: number; 
+  setLevel: (level: number) => void; 
 };
 
 const CornerstoneContext = React.createContext<CornerstoneContextType | null>(
@@ -83,6 +91,8 @@ export const CornerstoneProvider: React.FC<{ children: React.ReactNode }> = ({
   const [toolGroupOpacity, setToolGroupOpacity] = React.useState<number>(
     DEFAULT_SEGMENTATION_OPACITY
   );
+  const [window, setWindow] = React.useState<number>(DEFAULT_IMAGE_WINDOW);
+  const [level, setLevel] = React.useState<number>(DEFAULT_IMAGE_LEVEL);
 
   React.useEffect(() => {
     if (!initialized) return;
@@ -304,6 +314,34 @@ export const CornerstoneProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, [toolGroupOpacity, toolGroup]);
 
+  React.useEffect(() => {
+    if (!renderingEngine) return;
+    if (!viewports.length) return;
+  
+    viewports.forEach((viewportId) => {
+      const viewport = renderingEngine.getViewport(viewportId);
+  
+      if (viewport instanceof VolumeViewport) {
+        const actorEntry = viewport.getDefaultActor();
+        if (actorEntry) {
+          const { actor } = actorEntry;
+  
+          // vtkVolume 타입인지 확인
+          if (actor.isA && actor.isA("vtkVolume")) {
+            const property = actor.getProperty();
+            if (property) {
+              const voiRange = property.getVOIRange();
+              console.log("Current VOI:", voiRange);
+  
+              property.setVOIRange(window, level); // VOI 설정
+              viewport.render(); // 변경 사항 렌더링
+            }
+          }
+        }
+      }
+    });
+  }, [window, level, renderingEngine, viewports]);
+  
   return (
     <CornerstoneContext.Provider
       value={{
@@ -323,6 +361,11 @@ export const CornerstoneProvider: React.FC<{ children: React.ReactNode }> = ({
 
         toolGroupOpacity,
         setToolGroupOpacity,
+
+        window,
+        setWindow,
+        level,
+        setLevel,
       }}
     >
       {children}
