@@ -2,6 +2,9 @@ import { Color } from "@cornerstonejs/core/dist/types/types";
 
 export const DEFAULT_SEGMENTATION_OPACITY = 0.6;
 
+export const DEFAULT_IMAGE_WINDOW = 40;
+export const DEFAULT_IMAGE_LEVEL = 500;
+
 export const DEFAULT_SEGMENTATION_CONFIG = {
   fillAlpha: DEFAULT_SEGMENTATION_OPACITY,
   fillAlphaInactive: DEFAULT_SEGMENTATION_OPACITY,
