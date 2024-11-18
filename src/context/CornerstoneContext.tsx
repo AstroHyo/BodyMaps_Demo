@@ -15,7 +15,6 @@ import {
   RenderingEngine,
   setVolumesForViewports,
   volumeLoader,
-  VolumeViewport
 } from "@cornerstonejs/core";
 import {
   Enums,
@@ -65,8 +64,8 @@ type CornerstoneContextType = {
 
   window: number;
   setWindow: (window: number) => void;
-  level: number; 
-  setLevel: (level: number) => void; 
+  level: number;
+  setLevel: (level: number) => void;
 };
 
 const CornerstoneContext = React.createContext<CornerstoneContextType | null>(
@@ -316,32 +315,18 @@ export const CornerstoneProvider: React.FC<{ children: React.ReactNode }> = ({
 
   React.useEffect(() => {
     if (!renderingEngine) return;
-    if (!viewports.length) return;
-  
-    viewports.forEach((viewportId) => {
-      const viewport = renderingEngine.getViewport(viewportId);
-  
-      if (viewport instanceof VolumeViewport) {
-        const actorEntry = viewport.getDefaultActor();
-        if (actorEntry) {
-          const { actor } = actorEntry;
-  
-          // vtkVolume 타입인지 확인
-          if (actor.isA && actor.isA("vtkVolume")) {
-            const property = actor.getProperty();
-            if (property) {
-              const voiRange = property.getVOIRange();
-              console.log("Current VOI:", voiRange);
-  
-              property.setVOIRange(window, level); // VOI 설정
-              viewport.render(); // 변경 사항 렌더링
-            }
-          }
-        }
-      }
+
+    renderingEngine.getVolumeViewports().forEach((vv) => {
+      vv.setProperties({
+        voiRange: {
+          upper: level + window / 2,
+          lower: level - window / 2,
+        },
+      });
+      vv.render();
     });
-  }, [window, level, renderingEngine, viewports]);
-  
+  }, [window, level, renderingEngine]);
+
   return (
     <CornerstoneContext.Provider
       value={{

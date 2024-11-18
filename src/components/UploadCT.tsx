@@ -8,6 +8,7 @@ import { base64ToArrayBuffer } from "@/utils/base64ToArrayBuffer";
 import { useCornerstone } from "@/context/CornerstoneContext";
 import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 
 export default function UploadCT() {
   const [file, setFile] = React.useState<File | null>(null);
@@ -231,6 +232,63 @@ export default function UploadCT() {
           onChange={handleFileChange}
           disabled={isUploading || isProcessing}
         />
+        {process.env.NEXT_PUBLIC_ALLOW_DEMO && (
+          <Button
+            onClick={() => {
+              Promise.all(
+                [
+                  {
+                    organName: "aorta",
+                    url: "/demo/aorta.nii.gz",
+                  },
+                  {
+                    organName: "gallbladder",
+                    url: "/demo/gallbladder.nii.gz",
+                  },
+                  {
+                    organName: "kidney_left",
+                    url: "/demo/kidney_left.nii.gz",
+                  },
+                  {
+                    organName: "kidney_right",
+                    url: "/demo/kidney_right.nii.gz",
+                  },
+                  {
+                    organName: "liver",
+                    url: "/demo/liver.nii.gz",
+                  },
+                  {
+                    organName: "pancreas",
+                    url: "/demo/pancreas.nii.gz",
+                  },
+                  {
+                    organName: "spleen",
+                    url: "/demo/spleen.nii.gz",
+                  },
+                  {
+                    organName: "stomach",
+                    url: "/demo/stomach.nii.gz",
+                  },
+                ].map(async ({ organName, url }) => {
+                  const res = await fetch(url);
+                  const content = await res.arrayBuffer();
+                  return {
+                    organName,
+                    content,
+                    volumeCM: "",
+                    meanHU: "",
+                  };
+                })
+              ).then((segmentations) => {
+                setVolumeURL("/demo/ct.nii.gz");
+                setSegmentations(segmentations);
+                router.push("/visualization");
+              });
+            }}
+          >
+            Load Demo
+          </Button>
+        )}
         {(isUploading || isProcessing) && (
           <div className="w-full mt-4">
             <div className="mb-2 flex justify-between items-center">
