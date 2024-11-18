@@ -87,8 +87,8 @@ export default function VisualizationControls({
         </label>
         <input
           type="range"
-          min="1"
-          max="2000"
+          min="-1000"
+          max="1000"
           step="1"
           value={window}
           onChange={(e) => setWindow(parseFloat(e.target.value))}
