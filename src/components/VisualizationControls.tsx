@@ -9,7 +9,7 @@ export default function VisualizationControls({
   window,
   setWindow,
   level,
-  setLevel
+  setLevel,
 }: {
   segments?: { organName: string }[];
   visibilities: boolean[];
@@ -89,7 +89,7 @@ export default function VisualizationControls({
           type="range"
           min="1"
           max="2000"
-          step="10"
+          step="1"
           value={window}
           onChange={(e) => setWindow(parseFloat(e.target.value))}
           className="w-full"
@@ -103,7 +103,7 @@ export default function VisualizationControls({
           type="range"
           min="-1000"
           max="1000"
-          step="10"
+          step="1"
           value={level}
           onChange={(e) => setLevel(parseFloat(e.target.value))}
           className="w-full"
