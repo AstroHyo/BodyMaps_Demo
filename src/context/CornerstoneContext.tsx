@@ -319,8 +319,8 @@ export const CornerstoneProvider: React.FC<{ children: React.ReactNode }> = ({
     renderingEngine.getVolumeViewports().forEach((vv) => {
       vv.setProperties({
         voiRange: {
-          upper: level + window / 2,
-          lower: level - window / 2,
+          upper: window,
+          lower: level,
         },
       });
       vv.render();
